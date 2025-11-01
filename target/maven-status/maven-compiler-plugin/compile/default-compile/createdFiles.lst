@@ -1,0 +1,10 @@
+com/example/sensor/service/SensorService.class
+com/example/sensor/repo/SensorRepository.class
+com/example/sensor/Application.class
+com/example/sensor/repo/LastMeasurementRepository.class
+com/example/sensor/config/AppConfig.class
+com/example/sensor/api/SensorResource.class
+com/example/sensor/bootstrap/JettyServer.class
+com/example/sensor/domain/Sensor.class
+com/example/sensor/config/JPAFactory.class
+com/example/sensor/domain/LastMeasurement.class

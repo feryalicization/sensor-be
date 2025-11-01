@@ -1,0 +1,25 @@
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.1">
+  <persistence-unit name="sensorPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+    <class>com.example.sensor.domain.Sensor</class>
+    <class>com.example.sensor.domain.LastMeasurement</class>
+
+    <properties>
+      <!-- Default ke H2; di-override runtime -->
+      <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:sensordb;DB_CLOSE_DELAY=-1"/>
+      <property name="jakarta.persistence.jdbc.user" value="sa"/>
+      <property name="jakarta.persistence.jdbc.password" value=""/>
+
+      <!-- Pilih salah satu:
+           DEV cepat: auto generate DDL -->
+      <!-- <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/> -->
+      <property name="eclipselink.ddl-generation" value="none"/>
+      <!-- PROD (kalau pakai Flyway): set 'none' -->
+      <!-- <property name="eclipselink.ddl-generation" value="none"/> -->
+
+      <property name="eclipselink.logging.level" value="INFO"/>
+    </properties>
+  </persistence-unit>
+</persistence>
