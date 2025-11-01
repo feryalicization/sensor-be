@@ -217,21 +217,42 @@ public class SensorResource {
     public Response delete(@QueryParam("id") Long id) {
         if (id == null) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Map.of("code", 400, "message", "id is required"))
+                    .entity(Map.of(
+                            "code", 400,
+                            "message", "Parameter 'id' is required"))
                     .build();
         }
+
         EntityManager em = JPAFactory.get().createEntityManager();
         try {
             em.getTransaction().begin();
-            new SensorRepository(em).delete(id);
+            SensorRepository repo = new SensorRepository(em);
+
+            Sensor s = repo.find(id);
+            if (s == null) {
+                em.getTransaction().rollback();
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity(Map.of(
+                                "code", 404,
+                                "message", "Sensor with ID " + id + " not found"))
+                        .build();
+            }
+
+            repo.delete(id);
             em.getTransaction().commit();
-            return Response.status(Response.Status.NO_CONTENT).build();
+
+            return Response.ok(Map.of(
+                    "code", 200,
+                    "message", "Sensor deleted successfully",
+                    "id", id)).build();
+
         } catch (Exception e) {
             if (em.getTransaction().isActive())
                 em.getTransaction().rollback();
-            Throwable t = root(e);
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Map.of("code", 400, "message", t.getClass().getSimpleName() + ": " + t.getMessage()))
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(Map.of(
+                            "code", 500,
+                            "message", e.getMessage()))
                     .build();
         } finally {
             em.close();
