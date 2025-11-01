@@ -1,5 +1,6 @@
 com/example/sensor/service/SensorService.class
 com/example/sensor/repo/SensorRepository.class
+com/example/sensor/config/InstantAttributeConverter.class
 com/example/sensor/Application.class
 com/example/sensor/repo/LastMeasurementRepository.class
 com/example/sensor/config/AppConfig.class

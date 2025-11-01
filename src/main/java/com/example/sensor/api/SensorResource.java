@@ -11,7 +11,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Path("/api/sensor")
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,12 +33,6 @@ public class SensorResource {
         }
     }
 
-    // POST /api/sensor (contoh payload minimal)
-    // {
-    // "node":"5faea...",
-    // "title":"Temperature","unit":"°C","sensorType":"BME280","icon":"osem-thermometer",
-    // "lastMeasurement":{"createdAt":"2024-02-05T02:59:12.394Z","value":"29.99"}
-    // }
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(Map<String, Object> body) {
@@ -44,20 +41,22 @@ public class SensorResource {
             em.getTransaction().begin();
 
             Sensor s = new Sensor();
-            s.setNode((String) body.getOrDefault("node", "unknown"));
-            s.setTitle((String) body.get("title"));
-            s.setUnit((String) body.get("unit"));
-            s.setSensorType((String) body.get("sensorType"));
-            s.setIcon((String) body.get("icon"));
+            s.setNode(asStringOrDefault(body.get("node"), "unknown"));
+            s.setTitle(asString(body.get("title")));
+            s.setUnit(asString(body.get("unit")));
+            s.setSensorType(asString(body.get("sensorType")));
+            s.setIcon(asString(body.get("icon")));
             em.persist(s);
 
+            @SuppressWarnings("unchecked")
             Map<String, Object> lm = (Map<String, Object>) body.get("lastMeasurement");
             if (lm != null) {
                 LastMeasurement last = new LastMeasurement();
                 last.setSensor(s);
-                String createdAt = (String) lm.get("createdAt");
-                last.setCreatedAt(createdAt != null ? Instant.parse(createdAt) : Instant.now());
-                last.setValue((String) lm.get("value"));
+                Instant createdAtInstant = parseInstantFlexible(lm.get("createdAt"));
+                LocalDateTime createdAt = LocalDateTime.ofInstant(createdAtInstant, ZoneOffset.UTC);
+                last.setCreatedAt(createdAt);
+                last.setValue(asString(lm.get("value")));
                 em.persist(last);
             }
 
@@ -66,13 +65,17 @@ public class SensorResource {
         } catch (Exception e) {
             if (em.getTransaction().isActive())
                 em.getTransaction().rollback();
-            return Response.status(400).entity(Map.of("error", e.getMessage())).build();
+            Throwable t = e;
+            while (t.getCause() != null)
+                t = t.getCause();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Map.of("error", t.getClass().getName() + ": " + t.getMessage()))
+                    .build();
         } finally {
             em.close();
         }
     }
 
-    // DELETE /api/sensor?id=123
     @DELETE
     public Response delete(@QueryParam("id") Long id) {
         if (id == null)
@@ -90,5 +93,31 @@ public class SensorResource {
         } finally {
             em.close();
         }
+    }
+
+    /* ---------- Utility helpers below ---------- */
+
+    private static Instant parseInstantFlexible(Object input) {
+        if (input == null)
+            return Instant.now();
+        try {
+            if (input instanceof Number)
+                return Instant.ofEpochMilli(((Number) input).longValue());
+            String s = input.toString().trim();
+            if (s.matches("\\d+"))
+                return Instant.ofEpochMilli(Long.parseLong(s));
+            return Instant.parse(s);
+        } catch (Exception e) {
+            return Instant.now();
+        }
+    }
+
+    private static String asString(Object o) {
+        return o == null ? null : o.toString();
+    }
+
+    private static String asStringOrDefault(Object o, String def) {
+        String s = asString(o);
+        return (s == null || s.isBlank()) ? def : s;
     }
 }

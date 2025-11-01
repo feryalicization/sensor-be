@@ -1,7 +1,7 @@
 package com.example.sensor.domain;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "last_measurements")
@@ -15,13 +15,12 @@ public class LastMeasurement {
     @JoinColumn(name = "sensor_id")
     private Sensor sensor;
 
-    @Column(nullable = false)
-    private Instant createdAt;
+    @Column(nullable = false, name = "createdAt")
+    private LocalDateTime createdAt;
 
     @Column
     private String value;
 
-    // --- getters & setters ---
     public Long getId() {
         return id;
     }
@@ -38,11 +37,11 @@ public class LastMeasurement {
         this.sensor = sensor;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

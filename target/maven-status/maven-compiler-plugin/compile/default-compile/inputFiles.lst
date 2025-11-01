@@ -2,6 +2,7 @@
 /Users/ferychaerulismail/Documents/Test/sensor-backend/src/main/java/com/example/sensor/api/SensorResource.java
 /Users/ferychaerulismail/Documents/Test/sensor-backend/src/main/java/com/example/sensor/bootstrap/JettyServer.java
 /Users/ferychaerulismail/Documents/Test/sensor-backend/src/main/java/com/example/sensor/config/AppConfig.java
+/Users/ferychaerulismail/Documents/Test/sensor-backend/src/main/java/com/example/sensor/config/InstantAttributeConverter.java
 /Users/ferychaerulismail/Documents/Test/sensor-backend/src/main/java/com/example/sensor/config/JPAFactory.java
 /Users/ferychaerulismail/Documents/Test/sensor-backend/src/main/java/com/example/sensor/domain/LastMeasurement.java
 /Users/ferychaerulismail/Documents/Test/sensor-backend/src/main/java/com/example/sensor/domain/Sensor.java
