@@ -30,6 +30,12 @@
       <artifactId>jetty-servlet</artifactId>
       <version>${jetty.version}</version>
     </dependency>
+    <!-- ADD THIS: provides CrossOriginFilter -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlets</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
 
     <!-- Jersey (JAX-RS + JSON) -->
     <dependency>
@@ -69,14 +75,14 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!-- Flyway (core lib untuk runtime/unit test, dll.) -->
+    <!-- Flyway (core) -->
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
       <version>10.18.2</version>
     </dependency>
 
-    <!-- Logging (runtime) -->
+    <!-- Logging -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
@@ -94,9 +100,6 @@
   </dependencies>
 
   <build>
-    <!-- opsional: bikin nama file JAR fix -->
-    <!-- <finalName>sensor-backend-1.0.0-shaded</finalName> -->
-
     <plugins>
       <!-- Shade: fat-jar + Main-Class -->
       <plugin>
@@ -118,7 +121,7 @@
         </executions>
       </plugin>
 
-      <!-- Compiler (gunakan release=17 dari properties) -->
+      <!-- Compiler -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -128,7 +131,7 @@
         </configuration>
       </plugin>
 
-      <!-- Surefire: JUnit 5 -->
+      <!-- Surefire -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -138,19 +141,17 @@
         </configuration>
       </plugin>
 
-      <!-- Flyway plugin (+ handler mysql & driver mariadb untuk plugin) -->
+      <!-- Flyway plugin -->
       <plugin>
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-maven-plugin</artifactId>
         <version>10.18.2</version>
         <dependencies>
-          <!-- Handler DB MySQL/MariaDB -->
           <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
             <version>10.18.2</version>
           </dependency>
-          <!-- Driver JDBC untuk plugin -->
           <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>

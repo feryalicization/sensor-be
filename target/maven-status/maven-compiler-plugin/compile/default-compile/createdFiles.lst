@@ -1,4 +1,6 @@
+com/example/sensor/config/GlobalExceptionMapper.class
 com/example/sensor/service/SensorService.class
+com/example/sensor/config/CorsFilter.class
 com/example/sensor/repo/SensorRepository.class
 com/example/sensor/config/InstantAttributeConverter.class
 com/example/sensor/Application.class
@@ -9,3 +11,4 @@ com/example/sensor/bootstrap/JettyServer.class
 com/example/sensor/domain/Sensor.class
 com/example/sensor/config/JPAFactory.class
 com/example/sensor/domain/LastMeasurement.class
+com/example/sensor/api/HealthResource.class
