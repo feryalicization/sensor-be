@@ -20,27 +20,35 @@ The backend is built using **Jetty + JAX-RS (Jersey)** with **EclipseLink JPA** 
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Project Architecture
 
+````text
 sensor-backend/
 ├── src/
-│ ├── main/
-│ │ ├── java/com/example/sensor/
-│ │ │ ├── api/ # REST Controllers
-│ │ │ ├── config/ # JPA + App configuration
-│ │ │ ├── domain/ # JPA Entities
-│ │ │ ├── repo/ # Data Access Layer
-│ │ │ ├── service/ # Business Logic Layer
-│ │ │ └── Application.java # Main entrypoint (Jetty Server)
-│ │ └── resources/
-│ │ ├── META-INF/persistence.xml
-│ │ ├── sensorbackend.properties
-│ │ └── db/migration/ # Flyway migrations
-│ └── test/
-│ └── java/... # JUnit tests
-├── Dockerfile
-├── docker-compose.yml
-└── README.md
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/sensor/
+│   │   │       ├── api/               → REST API Endpoints (JAX-RS)
+│   │   │       ├── config/            → JPA & Jetty Configuration
+│   │   │       ├── domain/            → Entity Models (Sensor, LastMeasurement)
+│   │   │       ├── repo/              → Repository Layer (EclipseLink Queries)
+│   │   │       ├── service/           → Business Logic Layer
+│   │   │       └── Application.java   → Main Jetty Server Entrypoint
+│   │   └── resources/
+│   │       ├── META-INF/
+│   │       │   └── persistence.xml    → JPA Persistence Config
+│   │       ├── db/
+│   │       │   └── migration/         → Flyway Migration Scripts
+│   │       └── sensorbackend.properties → Database Configuration
+│   └── test/
+│       └── java/
+│           └── com/example/sensor/    → JUnit Tests
+│
+├── Dockerfile                         → Backend Docker Build Definition
+├── docker-compose.yml                 → Multi-Service Compose (Backend, DB, Frontend)
+├── pom.xml                            → Maven Build Configuration
+└── README.md                          → Project Documentation
+
 
 ---
 
@@ -83,7 +91,7 @@ simpletask.jdbc.user=root
 simpletask.jdbc.password=rootpassword
 
 
-```
+````
 
 Database Setup
 Option 1 — Using Flyway (automatic migration)
